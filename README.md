@@ -11,9 +11,9 @@ Setup/Use
 -------
 1. Run `npm install`
 2. Run `bower install`
-3. Run the webserver in one terminal tab `nodemon app/server.js`
+3. Run the webserver in one terminal tab `nodemon app/server.js` and open up `localhost:3000`.
 4. Run `gulp watch` in another terminal tab to run JS Lint and compile CSS.
-5. To create a build of your app for deplormeny, run `gulp build`. This will create a /dist folder containing your app.
+5. To create a build of your app for deployment, run `gulp build`. This will create a /dist folder containing your app.
 6. You can then test the build using `nodemon dist/server.js`.
 
 File Structure
