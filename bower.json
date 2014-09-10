@@ -1,0 +1,24 @@
+{
+  "name": "gulp-angular-skeleton",
+  "version": "0.0.0",
+  "authors": [
+    "hannaliebl <hanna@hannaliebl.com>"
+  ],
+  "description": "A basic Angular app framework using Grunt and Express",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "app/public/bower_components",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.23",
+    "angular-animate": "~1.2.23",
+    "angular-route": "~1.2.23"
+  }
+}
