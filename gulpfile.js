@@ -17,6 +17,7 @@ var gulp = require('gulp');
 var paths = {
   dev: {
     css: 'app/public/css',
+    html: 'app/public/**/*.html',
     sass: 'app/public/scss/*.scss',
     js: 'app/public/js/**/*.js',
     bower: 'app/bower_components/**'
@@ -32,6 +33,7 @@ var jsFilter = gulpFilter('*.js');
 
 gulp.task('watch', function() {
   livereload.listen();
+  gulp.watch(paths.dev.html).on('change', livereload.changed);
   gulp.watch(paths.dev.sass, ['styles']).on('change', livereload.changed);
   gulp.watch(paths.dev.js, ['lint']).on('change', livereload.changed);
 });
