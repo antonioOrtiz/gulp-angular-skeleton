@@ -23,7 +23,7 @@ var paths = {
     bower: 'app/bower_components/**'
   },
   build: {
-    main: 'dist/public',
+    main: 'dist/',
     css: 'dist/public/css',
     js: 'dist/public/js'
   }
@@ -36,35 +36,6 @@ gulp.task('watch', function() {
   gulp.watch(paths.dev.html).on('change', livereload.changed);
   gulp.watch(paths.dev.sass, ['styles']).on('change', livereload.changed);
   gulp.watch(paths.dev.js, ['lint']).on('change', livereload.changed);
-});
-
-gulp.task('build', ['empty-dist', 'prebuild', 'bower-files', 'copy-css', 'copy-server'], function () {
-  var assets = useref.assets();
-
-  return gulp.src('./app/public/**/*.html')
-    .pipe(assets)
-    .pipe(htmlify())
-    .pipe(assets.restore())
-    .pipe(useref())
-    .pipe(gulp.dest('dist/public'));
-});
-
-gulp.task('empty-dist', function() {
-  return gulp.src(paths.build.main, { read: false })
-    .pipe(rimraf());
-});
-
-gulp.task('prebuild', ['empty-dist'], function () {
-    return gulp.src([paths.dev.js, '!./app/public/bower_components/**'])
-      .pipe(uglify())
-      .pipe(concat('app.min.js'))
-      .pipe(ngAnnotate())
-      .pipe(gulp.dest(paths.build.js))
-});
-
-gulp.task('copy-css', function () {
-  return gulp.src('./app/public/css/*.css')
-    .pipe(gulp.dest('dist/public/css'));
 });
 
 gulp.task('styles', function() {
@@ -84,15 +55,33 @@ gulp.task('lint', function() {
   .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('minify-js', function() {
-  return gulp.src([paths.dev.js, '!./app/public/bower_components/**'])
+gulp.task('build', ['bower-files', 'copy-css', 'copy-server', 'copy-html-files'], function() {
+    return gulp.src(['./app/public/js/**/*.js', '!./app/public/bower_components/**'])
+    .pipe(ngAnnotate())
+    .pipe(uglify())
+    .pipe(concat('app.min.js'))
+    .pipe(gulp.dest(paths.build.js))
+});
+
+gulp.task('empty-dist', function() {
+  return gulp.src(paths.build.main, { read: false })
+    .pipe(rimraf());
+});
+
+gulp.task('copy-css', ['empty-dist'], function () {
+  return gulp.src('./app/public/css/*.css')
+    .pipe(gulp.dest('dist/public/css'));
+});
+
+gulp.task('minify-js', ['empty-dist'], function() {
+  return gulp.src(['./app/public/js/**/*.js', '!./app/public/bower_components/**'])
     .pipe(uglify())
     .pipe(concat('app.min.js'))
     .pipe(ngAnnotate())
     .pipe(gulp.dest(paths.build.js))
 });
 
-gulp.task('copy-html-files', function () {
+gulp.task('copy-html-files', ['empty-dist'], function () {
   var assets = useref.assets();
 
   return gulp.src('./app/public/**/*.html')
@@ -103,12 +92,12 @@ gulp.task('copy-html-files', function () {
     .pipe(gulp.dest('dist/public'));
 });
 
-gulp.task('copy-server', function () {
+gulp.task('copy-server', ['empty-dist'], function () {
   return gulp.src('./app/server.js')
   .pipe(gulp.dest('dist/'));
 })
 
-gulp.task("bower-files", function(){
+gulp.task("bower-files", ['empty-dist'], function(){
   return gulp.src(mainBowerFiles())
     .pipe(jsFilter)
     .pipe(uglify())
