@@ -73,14 +73,6 @@ gulp.task('copy-css', ['empty-dist'], function () {
     .pipe(gulp.dest('dist/public/css'));
 });
 
-gulp.task('minify-js', ['empty-dist'], function() {
-  return gulp.src(['./app/public/js/**/*.js', '!./app/public/bower_components/**'])
-    .pipe(uglify())
-    .pipe(concat('app.min.js'))
-    .pipe(ngAnnotate())
-    .pipe(gulp.dest(paths.build.js))
-});
-
 gulp.task('copy-html-files', ['empty-dist'], function () {
   var assets = useref.assets();
 
